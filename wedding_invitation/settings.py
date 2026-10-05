@@ -25,9 +25,17 @@ SECRET_KEY = 'django-insecure-yr#c-nur)m-6ynlv=y+@1bd9241c)7-wt3)r!9ly$77^j)x$kx
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'wedding-invitation-zxdr.onrender.com',
+    'localhost',
+    '127.0.0.1',
+    '*',
+]
 
-
+# ЗАДЪЛЖИТЕЛНО за Render (HTTPS):
+CSRF_TRUSTED_ORIGINS = [
+    'https://wedding-invitation-zxdr.onrender.com',
+]
 # Application definition
 
 INSTALLED_APPS = [
@@ -118,6 +126,7 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 
 # Email
