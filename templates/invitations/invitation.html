@@ -1,0 +1,1058 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<title>Сватбена покана — Моника & Александър</title>
+
+	<!-- Google Fonts -->
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Montserrat:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+
+	<style>
+		/* =========================================================
+		   ДИЗАЙН СИСТЕМА И ТЕМИ
+		   Сменяй класа на <body>: theme-burgundy | theme-sage | theme-navy
+		   ========================================================= */
+		:root, body.theme-burgundy {
+			--bg-page: #faf5ee;
+			--envelope-outside: #561521;
+			--envelope-inside: #3a0d15;
+			--envelope-liner: #e5d2b8;
+			--wax-base: #bf984d;
+			--wax-shadow: #7e5c1d;
+			--card-bg: #fffdfb;
+			--accent-gold: #c39d5b;
+			--accent-gold-soft: rgba(195, 157, 91, 0.35);
+			--accent-glow: rgba(195, 157, 91, 0.15);
+			--accent-dark: #3a0d16;
+			--text-main: #2b2220;
+			--text-muted: #736965;
+			--blob-color-1: rgba(86, 21, 33, 0.07);
+			--blob-color-2: rgba(195, 157, 91, 0.12);
+			--font-serif: 'Playfair Display', Georgia, serif;
+			--font-body: 'Cormorant Garamond', Georgia, serif;
+			--font-sans: 'Montserrat', sans-serif;
+			--font-script: 'Alex Brush', cursive;
+		}
+
+		body.theme-sage {
+			--bg-page: #f4f7f3;
+			--envelope-outside: #2d4234;
+			--envelope-inside: #1b2a20;
+			--envelope-liner: #dbe4dc;
+			--wax-base: #a68953;
+			--wax-shadow: #695227;
+			--card-bg: #ffffff;
+			--accent-gold: #76907a;
+			--accent-gold-soft: rgba(118, 144, 122, 0.35);
+			--accent-glow: rgba(118, 144, 122, 0.15);
+			--accent-dark: #1b2c20;
+			--text-main: #202722;
+			--text-muted: #5e6b61;
+			--blob-color-1: rgba(45, 66, 52, 0.07);
+			--blob-color-2: rgba(118, 144, 122, 0.14);
+		}
+
+		body.theme-navy {
+			--bg-page: #f3f5f9;
+			--envelope-outside: #182433;
+			--envelope-inside: #0d1620;
+			--envelope-liner: #d8e2ed;
+			--wax-base: #b9934c;
+			--wax-shadow: #795b21;
+			--card-bg: #ffffff;
+			--accent-gold: #6a85a4;
+			--accent-gold-soft: rgba(106, 133, 164, 0.35);
+			--accent-glow: rgba(106, 133, 164, 0.15);
+			--accent-dark: #101924;
+			--text-main: #1b232d;
+			--text-muted: #586576;
+			--blob-color-1: rgba(24, 36, 51, 0.07);
+			--blob-color-2: rgba(106, 133, 164, 0.14);
+		}
+
+		* { box-sizing: border-box; margin: 0; padding: 0; }
+
+		html {
+			scroll-behavior: smooth;
+		}
+
+		body {
+			background-color: var(--bg-page);
+			font-family: var(--font-body);
+			color: var(--text-main);
+			min-height: 100vh;
+			overflow-x: hidden;
+			overflow-y: hidden;
+			transition: background-color 0.5s ease;
+			position: relative;
+		}
+
+		body.unlocked {
+			overflow-y: auto;
+		}
+
+		/* АМБИЕНТНИ ПЕТНА */
+		.ambient-background {
+			position: fixed;
+			inset: 0;
+			pointer-events: none;
+			z-index: 0;
+			overflow: hidden;
+		}
+
+		.blob {
+			position: absolute;
+			border-radius: 50%;
+			filter: blur(80px);
+			opacity: 0.9;
+			animation: floatAura 22s infinite alternate ease-in-out;
+		}
+
+		.blob-1 {
+			width: 440px;
+			height: 440px;
+			background: var(--blob-color-1);
+			top: -100px;
+			left: -120px;
+		}
+
+		.blob-2 {
+			width: 500px;
+			height: 500px;
+			background: var(--blob-color-2);
+			bottom: 0;
+			right: -140px;
+			animation-duration: 26s;
+		}
+
+		@keyframes floatAura {
+			0% { transform: translate(0, 0) scale(1); }
+			100% { transform: translate(60px, 70px) scale(1.15); }
+		}
+
+		.vignette-overlay {
+			position: fixed;
+			inset: 0;
+			box-shadow: inset 0 0 100px rgba(0,0,0,0.035);
+			pointer-events: none;
+			z-index: 1;
+		}
+
+		/* ПАДАЩИ ВЕНЧЕЛИСТЧЕТА */
+		.particles-container {
+			position: fixed;
+			inset: 0;
+			pointer-events: none;
+			z-index: 2;
+			overflow: hidden;
+		}
+
+		.petal {
+			position: absolute;
+			top: -60px;
+			opacity: 0;
+			background: radial-gradient(circle at 30% 30%, #fae6b8 0%, var(--accent-gold) 85%);
+			border-radius: 50% 0 50% 50%;
+			filter: drop-shadow(0 2px 4px rgba(0,0,0,0.08));
+			animation-name: fallClean;
+			animation-timing-function: linear;
+			animation-iteration-count: infinite;
+			animation-fill-mode: both;
+		}
+
+		.petal-1 { left: 8%; width: 14px; height: 22px; animation-duration: 15s; animation-delay: 0.5s; }
+		.petal-2 { left: 32%; width: 11px; height: 17px; animation-duration: 13s; animation-delay: 4s; }
+		.petal-3 { left: 68%; width: 16px; height: 25px; animation-duration: 17s; animation-delay: 2s; }
+		.petal-4 { left: 88%; width: 12px; height: 19px; animation-duration: 14s; animation-delay: 6s; }
+
+		@keyframes fallClean {
+			0% {
+				top: -60px;
+				transform: rotate(0deg) translateX(0);
+				opacity: 0;
+			}
+			10% { opacity: 0.45; }
+			85% { opacity: 0.45; }
+			100% {
+				top: 105vh;
+				transform: rotate(360deg) translateX(65px);
+				opacity: 0;
+			}
+		}
+
+		/* =========================================================
+		   ПЪЛНОЕКРАНЕН ЕКРАН ЗА ПЛИКА
+		   ========================================================= */
+		.hero-envelope-screen {
+			position: relative;
+			width: 100vw;
+			height: 100vh;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			z-index: 10;
+			padding: 20px;
+		}
+
+		.envelope-box {
+			position: relative;
+			width: 324px;
+			height: 222px;
+			perspective: 1400px;
+			cursor: pointer;
+			transform: translateY(0);
+			transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+		}
+
+		.envelope-box.open {
+			transform: translateY(115px);
+		}
+
+		.envelope {
+			position: relative;
+			width: 100%;
+			height: 100%;
+			background-color: var(--envelope-inside);
+			border-radius: 6px;
+			box-shadow: 0 28px 60px rgba(0, 0, 0, 0.28), 0 4px 12px rgba(0, 0, 0, 0.15);
+		}
+
+		.envelope::before {
+			content: '';
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background: linear-gradient(135deg, var(--envelope-liner) 0%, #fffdfa 100%);
+			opacity: 0.28;
+			border-radius: 6px;
+		}
+
+		.envelope-flap {
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 0;
+			height: 0;
+			border-left: 162px solid transparent;
+			border-right: 162px solid transparent;
+			border-top: 126px solid var(--envelope-outside);
+			transform-origin: top center;
+			transition: transform 0.95s cubic-bezier(0.16, 1, 0.3, 1), z-index 0.25s;
+			z-index: 5;
+			filter: drop-shadow(0 3px 5px rgba(0,0,0,0.22));
+		}
+
+		.envelope-pocket {
+			position: absolute;
+			bottom: 0;
+			left: 0;
+			width: 0;
+			height: 0;
+			border-left: 162px solid var(--envelope-outside);
+			border-right: 162px solid var(--envelope-outside);
+			border-bottom: 112px solid var(--envelope-outside);
+			border-top: 112px solid transparent;
+			border-radius: 0 0 6px 6px;
+			z-index: 4;
+			pointer-events: none;
+			filter: drop-shadow(0 -3px 6px rgba(0,0,0,0.08));
+		}
+
+		.wax-seal {
+			position: absolute;
+			top: 98px;
+			left: 50%;
+			transform: translateX(-50%);
+			width: 56px;
+			height: 56px;
+			background: radial-gradient(circle at 35% 35%, #fae29f 0%, var(--wax-base) 65%, var(--wax-shadow) 100%);
+			border-radius: 50%;
+			box-shadow: 0 6px 20px rgba(0,0,0,0.4), inset 0 2px 4px rgba(255,255,255,0.45), inset 0 -2px 4px rgba(0,0,0,0.4);
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			color: #3b2707;
+			font-size: 24px;
+			font-family: var(--font-serif);
+			font-style: italic;
+			z-index: 6;
+			transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
+		}
+
+		.letter-card {
+			position: absolute;
+			top: 10px;
+			left: 12px;
+			width: 300px;
+			background: var(--card-bg);
+			border-radius: 4px;
+			padding: 26px 18px;
+			box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+			z-index: 3;
+			text-align: center;
+			border: 1px solid var(--accent-gold-soft);
+			transform: translateY(0);
+			transition: transform 1.25s cubic-bezier(0.16, 1, 0.3, 1), z-index 0.3s;
+		}
+
+		.letter-card::after {
+			content: '';
+			position: absolute;
+			inset: 6px;
+			border: 1px solid var(--accent-gold-soft);
+			pointer-events: none;
+			border-radius: 2px;
+		}
+
+		.corner-decor {
+			position: absolute;
+			width: 14px;
+			height: 14px;
+			border-color: var(--accent-gold);
+			border-style: solid;
+			pointer-events: none;
+		}
+		.corner-tl { top: 9px; left: 9px; border-width: 1.5px 0 0 1.5px; }
+		.corner-tr { top: 9px; right: 9px; border-width: 1.5px 1.5px 0 0; }
+		.corner-bl { bottom: 9px; left: 9px; border-width: 0 0 1.5px 1.5px; }
+		.corner-br { bottom: 9px; right: 9px; border-width: 0 1.5px 1.5px 0; }
+
+		.letter-card h3 {
+			font-family: var(--font-sans);
+			font-size: 0.7rem;
+			letter-spacing: 3.5px;
+			text-transform: uppercase;
+			color: var(--accent-gold);
+			margin-bottom: 6px;
+		}
+
+		.letter-card .guest-title {
+			font-family: var(--font-script);
+			font-size: 2.15rem;
+			line-height: 1.15;
+			color: var(--accent-dark);
+			margin: 4px 0 8px;
+		}
+
+		.letter-card .subtitle {
+			font-size: 0.95rem;
+			color: var(--text-muted);
+			font-style: italic;
+			margin-bottom: 6px;
+		}
+
+		.letter-card .names {
+			font-family: var(--font-serif);
+			font-size: 1.85rem;
+			letter-spacing: 0.5px;
+			margin: 8px 0 4px;
+			color: var(--text-main);
+		}
+
+		.letter-card .date {
+			font-family: var(--font-sans);
+			font-size: 0.78rem;
+			letter-spacing: 2px;
+			color: var(--accent-gold);
+			text-transform: uppercase;
+		}
+
+		.envelope-box.open .envelope-flap {
+			transform: rotateX(180deg);
+			z-index: 1;
+		}
+
+		.envelope-box.open .wax-seal {
+			opacity: 0;
+			transform: translateX(-50%) scale(0.3) rotate(30deg);
+			pointer-events: none;
+		}
+
+		.envelope-box.open .letter-card {
+			transform: translateY(-215px);
+			z-index: 10;
+			box-shadow: 0 24px 50px rgba(0,0,0,0.22);
+			transition-delay: 0.2s;
+		}
+
+		.hint-label {
+			margin-top: 32px;
+			font-family: var(--font-sans);
+			font-size: 0.75rem;
+			letter-spacing: 2.5px;
+			text-transform: uppercase;
+			color: var(--text-muted);
+			animation: softPulse 2s infinite ease-in-out;
+			cursor: pointer;
+			user-select: none;
+		}
+
+		@keyframes softPulse {
+			0%, 100% { opacity: 0.45; transform: translateY(0); }
+			50% { opacity: 0.95; transform: translateY(-3px); }
+		}
+
+		.scroll-down-btn {
+			position: absolute;
+			bottom: 25px;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			gap: 6px;
+			font-family: var(--font-sans);
+			font-size: 0.7rem;
+			letter-spacing: 2px;
+			text-transform: uppercase;
+			color: var(--accent-gold);
+			text-decoration: none;
+			opacity: 0;
+			transform: translateY(10px);
+			pointer-events: none;
+			transition: opacity 0.8s ease 0.8s, transform 0.8s ease 0.8s;
+		}
+
+		.scroll-down-btn.visible {
+			opacity: 1;
+			transform: translateY(0);
+			pointer-events: auto;
+		}
+
+		.scroll-down-btn span {
+			animation: bounce 1.8s infinite;
+			font-size: 1.1rem;
+		}
+
+		@keyframes bounce {
+			0%, 100% { transform: translateY(0); }
+			50% { transform: translateY(5px); }
+		}
+
+		/* =========================================================
+		   СЪДЪРЖАНИЕ СЪС СТРАНИЧНО ИЗСКАЧАНЕ
+		   ========================================================= */
+		.details-wrapper {
+			display: none;
+			max-width: 480px;
+			width: 100%;
+			margin: 0 auto;
+			padding: 20px 16px 80px;
+			position: relative;
+			z-index: 5;
+		}
+
+		.reveal-card {
+			background: var(--card-bg);
+			border-radius: 12px;
+			padding: 36px 24px;
+			margin-bottom: 30px;
+			box-shadow: 0 12px 35px rgba(0,0,0,0.04);
+			border: 1px solid var(--accent-gold-soft);
+			text-align: center;
+			position: relative;
+			opacity: 0;
+			transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1), transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+		}
+
+		.slide-left { transform: translateX(-40px); }
+		.slide-right { transform: translateX(40px); }
+
+		.reveal-card.is-visible {
+			opacity: 1;
+			transform: translateX(0);
+		}
+
+		.reveal-card h2 {
+			font-family: var(--font-serif);
+			color: var(--accent-dark);
+			font-size: 1.65rem;
+			font-weight: 400;
+			margin-bottom: 14px;
+		}
+
+		.divider {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			gap: 12px;
+			margin: 0 auto 22px;
+			color: var(--accent-gold);
+			font-size: 0.85rem;
+		}
+
+		.divider::before, .divider::after {
+			content: '';
+			width: 38px;
+			height: 1px;
+			background: var(--accent-gold);
+			opacity: 0.6;
+		}
+
+		/* ТАЙМЕР */
+		.countdown-grid {
+			display: grid;
+			grid-template-columns: repeat(4, 1fr);
+			gap: 10px;
+			margin-top: 10px;
+		}
+
+		.countdown-item {
+			background: rgba(195, 157, 91, 0.08);
+			border-radius: 8px;
+			padding: 12px 4px;
+			border: 1px solid var(--accent-gold-soft);
+		}
+
+		.countdown-val {
+			font-family: var(--font-serif);
+			font-size: 1.65rem;
+			font-weight: 600;
+			color: var(--accent-dark);
+			line-height: 1.1;
+		}
+
+		.countdown-label {
+			font-family: var(--font-sans);
+			font-size: 0.65rem;
+			text-transform: uppercase;
+			letter-spacing: 1.5px;
+			color: var(--text-muted);
+			margin-top: 4px;
+		}
+
+		/* ПРОГРАМА И ЛОКАЦИИ */
+		.timeline-item {
+			padding: 18px 0;
+			border-bottom: 1px dashed var(--accent-gold-soft);
+			display: flex;
+			flex-direction: column;
+			gap: 6px;
+			text-align: center;
+		}
+
+		.timeline-item:last-child { border-bottom: none; }
+
+		.time-badge {
+			font-family: var(--font-sans);
+			font-size: 0.8rem;
+			font-weight: 600;
+			color: var(--accent-gold);
+			letter-spacing: 2px;
+		}
+
+		.event-title {
+			font-family: var(--font-serif);
+			font-size: 1.35rem;
+			color: var(--text-main);
+		}
+
+		.event-location {
+			font-size: 0.95rem;
+			color: var(--text-muted);
+			margin-bottom: 10px;
+		}
+
+		.map-btn-group {
+			display: flex;
+			justify-content: center;
+			gap: 10px;
+		}
+
+		.map-link {
+			display: inline-flex;
+			align-items: center;
+			gap: 6px;
+			padding: 7px 16px;
+			font-family: var(--font-sans);
+			font-size: 0.72rem;
+			letter-spacing: 1px;
+			text-decoration: none;
+			border-radius: 30px;
+			border: 1px solid var(--accent-gold-soft);
+			color: var(--text-main);
+			background: white;
+			transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+		}
+
+		.map-link:hover {
+			background: var(--envelope-outside);
+			color: white;
+			border-color: var(--envelope-outside);
+			transform: translateY(-2px);
+		}
+
+		/* RSVP КАРТА: КОГАТО Е ВЕЧЕ ПОПЪЛНЕНО */
+		.rsvp-summary {
+			background: rgba(195, 157, 91, 0.08);
+			border-radius: 8px;
+			padding: 20px;
+			margin: 15px 0;
+			border: 1px dashed var(--accent-gold);
+			text-align: left;
+		}
+
+		.rsvp-summary-item {
+			margin-bottom: 10px;
+			font-size: 1.05rem;
+		}
+
+		.rsvp-summary-item:last-child {
+			margin-bottom: 0;
+		}
+
+		.status-badge {
+			display: inline-block;
+			padding: 4px 12px;
+			border-radius: 20px;
+			font-family: var(--font-sans);
+			font-size: 0.78rem;
+			letter-spacing: 1px;
+			font-weight: 600;
+			text-transform: uppercase;
+		}
+
+		.status-accepted {
+			background: #eaf5ec;
+			color: #1f6032;
+		}
+
+		.status-declined {
+			background: #fbeeed;
+			color: #932323;
+		}
+
+		/* ФОРМА */
+		.form-group {
+			text-align: left;
+			margin-bottom: 18px;
+		}
+
+		.form-group label {
+			display: block;
+			font-family: var(--font-sans);
+			font-size: 0.75rem;
+			letter-spacing: 1.5px;
+			text-transform: uppercase;
+			margin-bottom: 6px;
+			color: var(--text-main);
+		}
+
+		.form-group input, .form-group select {
+			width: 100%;
+			padding: 13px;
+			border: 1px solid #ddd2c4;
+			border-radius: 6px;
+			background: #faf8f5;
+			font-family: var(--font-body);
+			font-size: 1.05rem;
+			outline: none;
+			transition: border-color 0.3s, box-shadow 0.3s;
+		}
+
+		.form-group input:focus, .form-group select:focus {
+			border-color: var(--accent-gold);
+			box-shadow: 0 0 0 3px var(--accent-gold-soft);
+			background: #ffffff;
+		}
+
+		.submit-btn {
+			width: 100%;
+			background-color: var(--envelope-outside);
+			color: white;
+			border: none;
+			padding: 15px;
+			border-radius: 6px;
+			font-family: var(--font-sans);
+			font-size: 0.85rem;
+			letter-spacing: 2px;
+			text-transform: uppercase;
+			cursor: pointer;
+			margin-top: 10px;
+			transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+			box-shadow: 0 4px 15px rgba(0,0,0,0.12);
+		}
+
+		.submit-btn:hover {
+			opacity: 0.95;
+			transform: translateY(-2px);
+			box-shadow: 0 6px 20px rgba(0,0,0,0.18);
+		}
+
+		/* =========================================================
+		   ИЗЧЕЗВАЩ ПОП-ЪП (AUTO-DISMISS ALERT)
+		   ========================================================= */
+		.alert-container {
+			position: fixed;
+			top: 24px;
+			left: 50%;
+			transform: translateX(-50%);
+			z-index: 1000;
+			width: 90%;
+			max-width: 440px;
+			display: flex;
+			flex-direction: column;
+			gap: 10px;
+			pointer-events: none;
+		}
+
+		.alert {
+			pointer-events: auto;
+			background: #ffffff;
+			border-left: 4px solid var(--accent-gold);
+			border-radius: 8px;
+			padding: 16px 20px;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			gap: 14px;
+			box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+			font-family: var(--font-body);
+			font-size: 1.1rem;
+			color: var(--text-main);
+			transform: translateY(0);
+			opacity: 1;
+			transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+		}
+
+		.alert.alert-success {
+			border-left-color: #2e7d32;
+		}
+
+		.alert.alert-warning {
+			border-left-color: #ed6c02;
+		}
+
+		.alert.fade-out {
+			opacity: 0;
+			transform: translateY(-25px);
+		}
+
+		.alert-close {
+			background: transparent;
+			border: none;
+			font-size: 1.25rem;
+			line-height: 1;
+			color: var(--text-muted);
+			cursor: pointer;
+			padding: 4px;
+			transition: color 0.2s;
+		}
+
+		.alert-close:hover {
+			color: var(--text-main);
+		}
+	</style>
+</head>
+<body class="theme-burgundy"> <!-- Опции за тема: theme-burgundy, theme-sage, theme-navy -->
+
+<!-- АМБИЕНТЕН ФОН -->
+<div class="ambient-background">
+	<div class="blob blob-1"></div>
+	<div class="blob blob-2"></div>
+</div>
+<div class="vignette-overlay"></div>
+
+<!-- ПАДАЩИ ВЕНЧЕЛИСТЧЕТА -->
+<div class="particles-container">
+	<div class="petal petal-1"></div>
+	<div class="petal petal-2"></div>
+	<div class="petal petal-3"></div>
+	<div class="petal petal-4"></div>
+</div>
+
+<!-- ПОП-ЪП СЪОБЩЕНИЯ С АВТОМАТИЧНО ИЗЧЕЗВАНЕ -->
+{% if messages %}
+	<div class="alert-container">
+		{% for message in messages %}
+			<div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">
+				<span>{{ message }}</span>
+				<button class="alert-close" onclick="closeAlert(this)" aria-label="Затвори">&times;</button>
+			</div>
+		{% endfor %}
+	</div>
+{% endif %}
+
+<!-- ЕКРАН 1: ЦЕНТРИРАН ПЛИК -->
+<section class="hero-envelope-screen">
+
+	<div class="envelope-box" id="envelopeBox" onclick="openEnvelope()">
+		<div class="envelope">
+			<div class="envelope-flap"></div>
+			<div class="wax-seal">❦</div>
+
+			<div class="letter-card">
+				<div class="corner-decor corner-tl"></div>
+				<div class="corner-decor corner-tr"></div>
+				<div class="corner-decor corner-bl"></div>
+				<div class="corner-decor corner-br"></div>
+
+				<h3>Сватбена покана</h3>
+				<div class="guest-title">{{ guest.invitation_name }}</div>
+				<p class="subtitle">С най-голямо вълнение ви канят</p>
+				<div class="names">Моника &amp; Александър</div>
+				<div class="date">18 Септември 2027</div>
+			</div>
+
+			<div class="envelope-pocket"></div>
+		</div>
+	</div>
+
+	<p class="hint-label" id="hintLabel" onclick="openEnvelope()">Докоснете, за да отворите поканата</p>
+
+	<a href="#details" class="scroll-down-btn" id="scrollDownBtn">
+		Разгледай детайли
+		<span>↓</span>
+	</a>
+</section>
+
+<!-- ЕКРАН 2: СЪДЪРЖАНИЕ -->
+<div class="details-wrapper" id="details">
+
+	<!-- ТАЙМЕР -->
+	<div class="reveal-card slide-left">
+		<h2>До нашия специален ден</h2>
+		<div class="divider">❦</div>
+		<div class="countdown-grid" id="countdownGrid">
+			<div class="countdown-item">
+				<div class="countdown-val" id="days">00</div>
+				<div class="countdown-label">Дни</div>
+			</div>
+			<div class="countdown-item">
+				<div class="countdown-val" id="hours">00</div>
+				<div class="countdown-label">Часа</div>
+			</div>
+			<div class="countdown-item">
+				<div class="countdown-val" id="minutes">00</div>
+				<div class="countdown-label">Минути</div>
+			</div>
+			<div class="countdown-item">
+				<div class="countdown-val" id="seconds">00</div>
+				<div class="countdown-label">Секунди</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- ПРОГРАМА И ЛОКАЦИИ -->
+	<div class="reveal-card slide-right">
+		<h2>Програма &amp; Локации</h2>
+		<div class="divider">❦</div>
+
+		<div class="timeline-item">
+			<span class="time-badge">16:00 ЧАСА</span>
+			<div class="event-title">Граждански ритуал</div>
+			<div class="event-location">Ритуална зала „Красно село“, гр. София</div>
+			<div class="map-btn-group">
+				<a class="map-link" href="https://maps.google.com/?q=Ритуална+зала+Красно+село" target="_blank">📍 Google Maps</a>
+				<a class="map-link" href="https://waze.com/ul?q=Ритуална+зала+Красно+село" target="_blank">🚙 Waze</a>
+			</div>
+		</div>
+
+		<div class="timeline-item">
+			<span class="time-badge">17:30 ЧАСА</span>
+			<div class="event-title">Свето венчание</div>
+			<div class="event-location">Храм „Света Неделя“, гр. София</div>
+			<div class="map-btn-group">
+				<a class="map-link" href="https://maps.google.com/?q=Храм+Света+Неделя+София" target="_blank">📍 Google Maps</a>
+				<a class="map-link" href="https://waze.com/ul?q=Храм+Света+Неделя+София" target="_blank">🚙 Waze</a>
+			</div>
+		</div>
+
+		<div class="timeline-item">
+			<span class="time-badge">19:00 ЧАСА</span>
+			<div class="event-title">Празнична вечеря &amp; Парти</div>
+			<div class="event-location">Ресторант „Панорама“, гр. София</div>
+			<div class="map-btn-group">
+				<a class="map-link" href="https://maps.google.com/?q=Ресторант+Панорама+София" target="_blank">📍 Google Maps</a>
+				<a class="map-link" href="https://waze.com/ul?q=Ресторант+Панорама+София" target="_blank">🚙 Waze</a>
+			</div>
+		</div>
+	</div>
+
+	<!-- RSVP: ЕДНОКРАТНО ПОПЪЛВАНЕ -->
+	<div class="reveal-card slide-left">
+		<h2>Потвърждение за присъствие</h2>
+		<div class="divider">❦</div>
+
+		{% if guest.is_attending is not None %}
+			<p style="font-size: 1.1rem; color: var(--text-main); margin-bottom: 12px;">
+				Благодарим ви, вашият отговор е успешно записан!
+			</p>
+
+			<div class="rsvp-summary">
+				<div class="rsvp-summary-item">
+					<strong>Статус:</strong>
+					{% if guest.is_attending %}
+						<span class="status-badge status-accepted">Присъствате</span>
+					{% else %}
+						<span class="status-badge status-declined">Няма да успеете</span>
+					{% endif %}
+				</div>
+				{% if guest.is_attending %}
+					<div class="rsvp-summary-item">
+						<strong>Потвърдени гости:</strong> {{ guest.attending_count }}
+					</div>
+					{% if guest.dietary_notes %}
+						<div class="rsvp-summary-item">
+							<strong>Меню / Бележки:</strong> {{ guest.dietary_notes }}
+						</div>
+					{% endif %}
+					{% if guest.music_wish %}
+						<div class="rsvp-summary-item">
+							<strong>Любима песен:</strong> {{ guest.music_wish }}
+						</div>
+					{% endif %}
+				{% endif %}
+			</div>
+
+			<p style="font-size: 0.9rem; color: var(--text-muted); font-style: italic;">
+				Ако настъпи непредвидена промяна, моля свържете се директно с младоженците.
+			</p>
+
+		{% else %}
+			<p style="font-size: 0.95rem; color: var(--text-muted); margin-bottom: 22px;">
+				Молим да ни уведомите за вашето присъствие до <strong>1 Август 2027</strong>.<br>
+				Заделени места за вас: <strong>до {{ guest.max_guests }}</strong>
+			</p>
+
+			<form method="POST">
+				{% csrf_token %}
+				<div class="form-group">
+					<label>Ще присъствате ли?</label>
+					<select name="is_attending" required>
+						<option value="yes">С удоволствие ще присъстваме!</option>
+						<option value="no">За съжаление няма да успеем</option>
+					</select>
+				</div>
+
+				<div class="form-group">
+					<label>Брой гости, които идват:</label>
+					<select name="attending_count">
+						{% for i in "12345"|make_list %}
+							{% if forloop.counter <= guest.max_guests %}
+								<option value="{{ forloop.counter }}">
+									{{ forloop.counter }} {% if forloop.counter == 1 %}човек{% else %}души{% endif %}
+								</option>
+							{% endif %}
+						{% endfor %}
+					</select>
+				</div>
+
+				<div class="form-group">
+					<label>Меню / Хранителни предпочитания:</label>
+					<input type="text" name="dietary_notes" placeholder="Напр. 1x свинско, 1x вегетарианско">
+				</div>
+
+				<div class="form-group">
+					<label>Вашата любима песен за дансинга:</label>
+					<input type="text" name="music_wish" placeholder="Изпълнител и песен">
+				</div>
+
+				<button type="submit" class="submit-btn">Изпрати окончателен отговор</button>
+			</form>
+		{% endif %}
+
+	</div>
+</div>
+
+<script>
+	// 1. АВТОМАТИЧНО ИЗЧЕЗВАНЕ НА ПОП-ЪП БАНЕРА СЛЕД 4 СЕКУНДИ
+	function setupAlerts() {
+		const alerts = document.querySelectorAll('.alert');
+		alerts.forEach(alert => {
+			setTimeout(() => {
+				dismissAlert(alert);
+			}, 4000); // 4 секунди продължителност
+		});
+	}
+
+	function closeAlert(btn) {
+		const alert = btn.closest('.alert');
+		dismissAlert(alert);
+	}
+
+	function dismissAlert(alert) {
+		if (!alert || alert.classList.contains('fade-out')) return;
+		alert.classList.add('fade-out');
+		setTimeout(() => {
+			alert.remove();
+		}, 600); // изчаква CSS прехода
+	}
+
+	document.addEventListener('DOMContentLoaded', setupAlerts);
+
+	// 2. ОТВАРЯНЕ НА ПЛИКА
+	function openEnvelope() {
+		const box = document.getElementById('envelopeBox');
+		if (!box.classList.contains('open')) {
+			box.classList.add('open');
+			document.getElementById('hintLabel').style.display = 'none';
+
+			setTimeout(() => {
+				document.body.classList.add('unlocked');
+				document.getElementById('details').style.display = 'block';
+				document.getElementById('scrollDownBtn').classList.add('visible');
+				initScrollObserver();
+			}, 600);
+		}
+	}
+
+	// Ако вече е отговорено
+	{% if guest.is_attending is not None %}
+		document.body.classList.add('unlocked');
+		document.getElementById('envelopeBox').classList.add('open');
+		document.getElementById('hintLabel').style.display = 'none';
+		document.getElementById('details').style.display = 'block';
+		document.getElementById('scrollDownBtn').classList.add('visible');
+		setTimeout(initScrollObserver, 100);
+	{% endif %}
+
+	// 3. СКРОЛ НАБЛЮДАТЕЛ
+	function initScrollObserver() {
+		const cards = document.querySelectorAll('.reveal-card');
+		const observer = new IntersectionObserver((entries) => {
+			entries.forEach(entry => {
+				if (entry.isIntersecting) {
+					entry.target.classList.add('is-visible');
+				}
+			});
+		}, {
+			threshold: 0.12,
+			rootMargin: "0px 0px -40px 0px"
+		});
+
+		cards.forEach(card => observer.observe(card));
+	}
+
+	// 4. ТАЙМЕР
+	const weddingDate = new Date("2027-09-18T16:00:00").getTime();
+
+	function updateCountdown() {
+		const now = new Date().getTime();
+		const diff = weddingDate - now;
+
+		if (diff <= 0) {
+			document.getElementById("countdownGrid").innerHTML = "<p style='grid-column: 1/-1; font-weight:600;'>Сватбеният ден настъпи! 🎉</p>";
+			return;
+		}
+
+		const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+		const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+		const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+		const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+		document.getElementById("days").innerText = String(days).padStart(2, '0');
+		document.getElementById("hours").innerText = String(hours).padStart(2, '0');
+		document.getElementById("minutes").innerText = String(minutes).padStart(2, '0');
+		document.getElementById("seconds").innerText = String(seconds).padStart(2, '0');
+	}
+
+	setInterval(updateCountdown, 1000);
+	updateCountdown();
+</script>
+</body>
+</html>
