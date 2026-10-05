@@ -1,10 +1,16 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages
+from django.utils import timezone
+
 from .models import Guest
 
 
 def invitation_detail(request, slug):
 	guest = get_object_or_404(Guest, slug=slug)
+
+	if guest.opened_at is None:
+		guest.opened_at = timezone.now()
+	guest.save(update_fields=['opened_at'])
 
 	if request.method == "POST":
 		# Защита: Ако вече е отговорено веднъж, не позволяваме промяна

@@ -49,6 +49,8 @@ class Guest(models.Model):
 		verbose_name="Последна промяна"
 	)
 
+	opened_at = models.DateTimeField(null=True, blank=True, verbose_name="Отворена на")
+
 	class Meta:
 		verbose_name = "Гост"
 		verbose_name_plural = "Гости"
